@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from app.api.routes import vacantes
+from app.api.routes import portfolio
 
 api_router = APIRouter()
-# api_router.include_router(login.router, tags=["login"])
-api_router.include_router(vacantes.router, prefix="/vacantes", tags=["vacantes"])
+
+api_router.include_router(portfolio.router, tags=["portfolio"])

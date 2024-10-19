@@ -1,0 +1,9 @@
+fastapi
+pydantic
+pydantic_settings
+uvicorn
+yfinance
+numpy 
+pandas
+scipy
+cvxpy
