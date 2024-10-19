@@ -18,24 +18,24 @@ def calculate_risk_score(response: QuestionnaireResponse) -> int:
     risk_score = 0
 
     # Age group scoring
-    age_group_scores = {"Under 30": 4, "30-45": 3, "46-60": 2, "Over 60": 1}
+    age_group_scores = {"Menos de 30": 4, "30-45": 3, "46-60": 2, "Más de 60": 1}
     risk_score += age_group_scores[response.age_group.value]
 
     # Investment goal scoring
     investment_goal_scores = {
-        "Capital preservation": 1,
-        "Income generation": 2,
-        "Growth": 3,
-        "Aggressive growth": 4,
+        "Preservación de capital": 1,
+        "Generación de ingresos": 2,
+       "Crecimiento": 3,
+        "Crecimiento agresivo": 4,
     }
     risk_score += investment_goal_scores[response.investment_goal.value]
 
     # Loss reaction scoring
     loss_reaction_scores = {
-        "Sell all investments": 1,
-        "Sell some investments": 2,
-        "Do nothing": 3,
-        "Invest more": 4,
+        "Vender todas las inversiones": 1,
+        "Vender algunas inversiones": 2,
+       "No hacer nada": 3,
+        "Invertir más": 4,
     }
     risk_score += loss_reaction_scores[response.loss_reaction.value]
 
@@ -44,10 +44,10 @@ def calculate_risk_score(response: QuestionnaireResponse) -> int:
 
 def determine_investment_term(horizon: InvestmentHorizon) -> int:
     horizon_terms = {
-        "Less than 1 year": 365,
-        "1-3 years": 1095,  # 3 years
-        "3-5 years": 1825,  # 5 years
-        "More than 5 years": 3650,  # 10 years
+        "Menos de 1 año": 365,
+        "1-3 años": 1095,  # 3 years
+        "3-5 años": 1825,  # 5 years
+        "Más de 5 años": 3650,  # 10 years
     }
     return horizon_terms[horizon.value]
 

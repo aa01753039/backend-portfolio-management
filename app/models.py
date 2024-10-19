@@ -10,28 +10,28 @@ class Objective(str, Enum):
 
 
 class AgeGroup(str, Enum):
-    under_30 = "Under 30"
+    under_30 = "Menos de 30"
     _30_45 = "30-45"
     _46_60 = "46-60"
-    over_60 = "Over 60"
+    over_60 = "Más de 60"
 
 class InvestmentGoal(str, Enum):
-    capital_preservation = "Capital preservation"
-    income_generation = "Income generation"
-    growth = "Growth"
-    aggressive_growth = "Aggressive growth"
+    capital_preservation = "Preservación de capital"
+    income_generation = "Generación de ingresos"
+    growth = "Crecimiento"
+    aggressive_growth = "Crecimiento agresivo"
 
 class LossReaction(str, Enum):
-    sell_all = "Sell all investments"
-    sell_some = "Sell some investments"
-    do_nothing = "Do nothing"
-    invest_more = "Invest more"
+    sell_all = "Vender todas las inversiones"
+    sell_some = "Vender algunas inversiones"
+    do_nothing = "No hacer nada"
+    invest_more = "Invertir más"
 
 class InvestmentHorizon(str, Enum):
-    less_than_1_year = "Less than 1 year"
-    _1_3_years = "1-3 years"
-    _3_5_years = "3-5 years"
-    more_than_5_years = "More than 5 years"
+    less_than_1_year = "Menos de 1 año"
+    _1_3_years = "1-3 años"
+    _3_5_years = "3-5 años"
+    more_than_5_years = "Más de 5 años"
 
 class QuestionnaireResponse(BaseModel):
     age_group: AgeGroup
