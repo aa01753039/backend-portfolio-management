@@ -180,13 +180,19 @@ def optimize_portfolio_with_risk_level(risk_level: float, investment_term: int):
     confidence_level = 0.95
     z_score = norm.ppf(confidence_level)
 
-    # Daily VaR
-    daily_var = -(daily_expected_return - z_score * daily_expected_risk)
+    # Daily VaR (Historical)
+    historical_var = np.percentile(returns @ allocation, (1 - confidence_level) * 100)
+    
+    # If historical returns produce unrealistic VaR values, revert to normal VaR
+    daily_var = min(-(daily_expected_return - z_score * daily_expected_risk), -historical_var)
 
-    # Weekly and Yearly VaR
+    # Weekly VaR with proper scaling
     trading_days_per_week = 5
     weekly_var = daily_var * np.sqrt(trading_days_per_week)
-    yearly_var = daily_var * np.sqrt(trading_days_per_year)
+
+    # Adjust yearly VaR scaling based on non-iid assumption
+    yearly_var = daily_var * np.sqrt(min(trading_days_per_year, investment_term))
+
 
     # Historical data and change calculations
     historical_data = {}
