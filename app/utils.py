@@ -86,9 +86,9 @@ def optimize_portfolio_assets(
     elif objective == Objective.max_sharpe:
         # Set a fixed risk level (e.g., portfolio risk <= 1)
         # You can adjust this risk level based on your data scale
-        risk_target = 1.0  # Adjust this value as appropriate
-        constraints.append(portfolio_risk <= risk_target)
-        objective_function = cp.Maximize(portfolio_return)
+        risk_target = 0.05  # Adjust this value as appropriate
+        # constraints.append(portfolio_risk <= risk_target)
+        objective_function = cp.Maximize((portfolio_return-portfolio_risk)/risk_target)
 
     elif objective == Objective.max_return_with_risk:
         if risk_limit is None:

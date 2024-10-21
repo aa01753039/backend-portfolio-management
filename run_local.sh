@@ -9,10 +9,9 @@ docker run -p 5173:8080 385848d3d645744c2ddb345a18b4a7230278d03f559f4eed975ad9df
 docker build -t api:1.1.1 .
 
 # gcloud build backend
-../../.././google-cloud-sdk/bin/gcloud builds submit --region=global --tag gcr.io/portal-reclutamiento/api:v1.1.1
-
+../../.././google-cloud-sdk/bin/gcloud builds submit --region=global --tag gcr.io/portfolio-optimization-439220/api:v1.0.0
 #gcloud build frontend
-../../.././google-cloud-sdk/bin/gcloud builds submit --region=global --tag gcr.io/portal-reclutamiento/frontend:v1.1.1
+../../.././google-cloud-sdk/bin/gcloud builds submit --region=global --tag gcr.io/portfolio-optimization-439220/frontend:v1.0.0
 
 # Para correr el backend local en un dev container
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8080 
