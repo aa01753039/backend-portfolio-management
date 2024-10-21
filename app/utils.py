@@ -221,6 +221,8 @@ def optimize_portfolio_with_risk_level(risk_level: float, investment_term: int):
             historical_data[ticker] = {
                 "error": "No data available for this ticker in the given period."
             }
+    #calculate correlation matrix and return it
+    correlation_matrix = returns.corr()
 
     return {
             "objective": objective,
@@ -237,4 +239,5 @@ def optimize_portfolio_with_risk_level(risk_level: float, investment_term: int):
                 "yearly_var": round(yearly_var * 100, 2),
             },
             "historical_data": historical_data,
+            "correlation_matrix": correlation_matrix.to_dict(),
         }

@@ -147,15 +147,31 @@ def optimize_portfolio(
     )
 
     # VaR Calculations
+    # z_score = norm.ppf(confidence_level)
+
+    # # Daily VaR
+    # daily_var = -(daily_expected_return - z_score * daily_expected_risk)
+
+    # # Weekly and Yearly VaR
+    # trading_days_per_week = 5
+    # weekly_var = daily_var * np.sqrt(trading_days_per_week)
+    # yearly_var = daily_var * np.sqrt(trading_days_per_year)
+
     z_score = norm.ppf(confidence_level)
 
-    # Daily VaR
-    daily_var = -(daily_expected_return - z_score * daily_expected_risk)
+    # Daily VaR (Historical)
+    historical_var = np.percentile(returns @ allocation, (1 - confidence_level) * 100)
+    
+    # If historical returns produce unrealistic VaR values, revert to normal VaR
+    daily_var = min(-(daily_expected_return - z_score * daily_expected_risk), -historical_var)
 
-    # Weekly and Yearly VaR
+    # Weekly VaR with proper scaling
     trading_days_per_week = 5
     weekly_var = daily_var * np.sqrt(trading_days_per_week)
-    yearly_var = daily_var * np.sqrt(trading_days_per_year)
+
+    # Adjust yearly VaR scaling based on non-iid assumption
+    yearly_var = daily_var * np.sqrt(min(trading_days_per_year, investment_term))
+
 
     # Historical data and change calculations
     historical_data = {}
@@ -185,7 +201,10 @@ def optimize_portfolio(
                 "error": "No data available for this ticker in the given period."
             }
 
+    correlation_matrix = returns.corr()
     return {
+        "objective": objective,
+        "investment_term_days": investment_term,
         "allocation": allocation_percentages,
         "expected_daily_return": round(daily_expected_return * 100, 2),
         "expected_daily_risk": round(daily_expected_risk * 100, 2),
@@ -198,4 +217,5 @@ def optimize_portfolio(
             "yearly_var": round(yearly_var * 100, 2),
         },
         "historical_data": historical_data,
+        "correlation_matrix": correlation_matrix.to_dict(),
     }
