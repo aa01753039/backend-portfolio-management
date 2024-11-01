@@ -71,8 +71,9 @@ def optimize_portfolio_assets(
     weights = cp.Variable(n_assets)
 
     # Define risk and return expressions
-    portfolio_return = expected_returns.values @ weights
-    portfolio_risk = cp.quad_form(weights, covariance_matrix.values)
+    portfolio_return = expected_returns.values @ weights *252
+
+    portfolio_risk = 252 * cp.quad_form(weights, covariance_matrix.values)
 
     # Constraints: Weights sum to 1, no short selling
     constraints = [cp.sum(weights) == 1, weights >= 0]
@@ -118,7 +119,65 @@ def optimize_portfolio_assets(
         raise ValueError(f"Optimization failed. Status: {prob.status}")
 
     optimal_weights = weights.value
+    if objective == Objective.max_return_with_risk:
+        return optimal_weights, portfolio_return.value
+    else:
+        return optimal_weights, portfolio_risk.value
+
+def optimize_portfolio_levels(
+    expected_returns,
+    covariance_matrix,
+    objective,
+    target_return=None,
+    risk_limit=None,
+):
+    n_assets = len(expected_returns)
+    weights = cp.Variable(n_assets)
+
+    # Define risk and return expressions
+     # Define risk and return expressions
+    portfolio_return = expected_returns.values @ weights *252
+
+    portfolio_risk = 252 * cp.quad_form(weights, covariance_matrix.values)
+
+    # Constraints: Weights sum to 1, no short selling
+    constraints = [cp.sum(weights) == 1, weights >= 0]
+
+
+    if objective == Objective.max_return_with_risk:
+        if risk_limit is None:
+            raise ValueError(
+                "risk_limit must be provided for max_return_with_risk objective."
+            )
+        constraints.append(portfolio_risk <= risk_limit)
+        objective_function = cp.Maximize(portfolio_return)
+
+    elif objective == Objective.min_risk_with_return:
+        if target_return is None:
+            raise ValueError(
+                "target_return must be provided for min_risk_with_return objective."
+            )
+        constraints.append(portfolio_return >= target_return)
+        objective_function = cp.Minimize(portfolio_risk)
+
+    else:
+        raise ValueError("Invalid optimization objective.")
+
+    # Solve the optimization problem
+    prob = cp.Problem(objective_function, constraints)
+    prob.solve()
+
+    # Check if the optimization was successful
+    if prob.status not in ["optimal", "optimal_inaccurate"]:
+        raise ValueError(f"Optimization failed. Status: {prob.status}")
+
+    optimal_weights = weights.value
+    #return maximized return and minimized risk
+
     return optimal_weights
+    
+
+
 
 
 def optimize_portfolio_with_risk_level(risk_level: float, investment_term: int):
