@@ -43,7 +43,7 @@ def process_questionnaire(response: QuestionnaireResponse):
     risk_level = map_score_to_risk_level(risk_score)
 
     # Call the portfolio optimization function
-    # Here, we'll use the 'optimize_portfolio' function you already have
+   
     optimization_result = optimize_portfolio_with_risk_level(
         risk_level, investment_term
     )
