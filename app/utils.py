@@ -210,7 +210,7 @@ def optimize_portfolio_with_risk_level(risk_level: float, investment_term: int):
 
     # Optimize the portfolio
     try:
-        allocation = optimize_portfolio_assets(
+        allocation,result = optimize_portfolio_assets(
             expected_returns, covariance_matrix, objective, risk_limit=risk_level
         )
     except ValueError as e:
